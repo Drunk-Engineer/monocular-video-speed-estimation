@@ -44,6 +44,16 @@ The public package targets Python 3.11–3.13 and supports CPU inference. Minor
 floating-point differences across hardware, codecs, and library builds are
 expected.
 
+The published v1.0.0 demo CSV was generated through the macOS OpenCV 4.12
+decoder. A matching local reference run agrees within `1e-4` km/h. On the
+GitHub-hosted Ubuntu x86 runner, the same MP4 and model produce a measured
+maximum absolute difference of `0.608604` km/h, a mean absolute difference of
+`0.228614` km/h, and a 95th-percentile absolute difference of `0.538191` km/h.
+An A/B check using an explicit bit-exact BT.709 FFmpeg conversion produced
+identical RGB bytes across the two platforms and predictions within
+`1.6e-5` km/h, isolating the v1.0.0 discrepancy to the default OpenCV video
+conversion path rather than the checkpoint.
+
 ## Checkpoint procedure
 
 1. Download the v1.0.0 model, metadata, and `SHA256SUMS.txt` from the same
@@ -107,8 +117,12 @@ default.
   cleaning, and metrics.
 - **Model tests:** input/output shape, strict keys, CPU loading, and finite
   output.
-- **Demo regression:** 300 rows, monotonic relative timestamps, no missing
-  values, and prediction agreement within `atol=rtol=1e-4`.
+- **Local reference demo regression:** 300 rows, monotonic relative timestamps,
+  no missing values, and prediction agreement within `atol=rtol=1e-4`.
+- **Cross-platform Release check:** exact SHA-256 verification of the model and
+  metadata, safe metadata contracts, 300 finite predictions, and the measured
+  v1.0.0 decoder envelope (`max_abs <= 0.75`, `mean_abs <= 0.30`,
+  `p95_abs <= 0.65` km/h).
 - **Private research check:** recompute aggregate validation metrics without
   publishing the full trajectory.
 - **Privacy check:** confirm no audio or sensitive metadata and manually review

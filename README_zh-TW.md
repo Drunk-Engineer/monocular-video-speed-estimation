@@ -3,6 +3,7 @@
 [![CI](https://github.com/Drunk-Engineer/monocular-video-speed-estimation/actions/workflows/ci.yml/badge.svg)](https://github.com/Drunk-Engineer/monocular-video-speed-estimation/actions/workflows/ci.yml)
 [![程式授權：MIT](https://img.shields.io/badge/code-MIT-blue.svg)](LICENSE)
 [![模型與示範：CC BY 4.0](https://img.shields.io/badge/model%20%26%20demo-CC%20BY%204.0-lightgrey.svg)](MODEL_LICENSE.md)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21604583.svg)](https://doi.org/10.5281/zenodo.21604583)
 
 本專案使用隨機初始化的 R3D-18 與 Dilated TCN，從完整單眼騎乘畫面逐幀估測車速。
 
@@ -102,6 +103,8 @@ OCR 標籤仍須人工核對；公開指令會使用多種 Tesseract 影像變�
 > Chen, Ke-Jie. *Per-Frame Vehicle Speed Estimation from Monocular Dashcam
 > Videos Using 3D Convolutional Neural Networks*. Master's thesis, Department
 > of Computer Science, National Taipei University of Education, July 2026.
+
+v1.0.0 軟體封存版本：[https://doi.org/10.5281/zenodo.21604583](https://doi.org/10.5281/zenodo.21604583)。
 
 ## 授權與聯絡
 

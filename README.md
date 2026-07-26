@@ -3,6 +3,7 @@
 [![CI](https://github.com/Drunk-Engineer/monocular-video-speed-estimation/actions/workflows/ci.yml/badge.svg)](https://github.com/Drunk-Engineer/monocular-video-speed-estimation/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/code-MIT-blue.svg)](LICENSE)
 [![Model and demo: CC BY 4.0](https://img.shields.io/badge/model%20%26%20demo-CC%20BY%204.0-lightgrey.svg)](MODEL_LICENSE.md)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21604583.svg)](https://doi.org/10.5281/zenodo.21604583)
 
 Per-frame vehicle speed estimation from full-view monocular riding video using a
 randomly initialized R3D-18 backbone and a dilated temporal convolutional
@@ -131,6 +132,9 @@ academic reference is:
 > Chen, Ke-Jie. *Per-Frame Vehicle Speed Estimation from Monocular Dashcam
 > Videos Using 3D Convolutional Neural Networks*. Master's thesis, Department
 > of Computer Science, National Taipei University of Education, July 2026.
+
+The archived v1.0.0 software release is available at
+[https://doi.org/10.5281/zenodo.21604583](https://doi.org/10.5281/zenodo.21604583).
 
 ## Licenses and contact
 

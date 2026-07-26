@@ -6,6 +6,9 @@ This is the first public release of the code and trained model associated with:
 > Videos Using 3D Convolutional Neural Networks*, master's thesis, National
 > Taipei University of Education, July 2026.
 
+The archival record for this version is
+[https://doi.org/10.5281/zenodo.21604583](https://doi.org/10.5281/zenodo.21604583).
+
 ## Included
 
 - installable preprocessing, training, inference, evaluation, and OCR commands;

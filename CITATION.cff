@@ -20,6 +20,8 @@ keywords:
   - "3D convolutional neural network"
   - "temporal convolutional network"
 license: MIT
+doi: "10.5281/zenodo.21604583"
+date-released: "2026-07-26"
 repository-code: "https://github.com/Drunk-Engineer/monocular-video-speed-estimation"
 preferred-citation:
   type: thesis
