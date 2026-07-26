@@ -1,0 +1,49 @@
+# Operating system and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Python environments and caches
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Packaging and build output
+build/
+dist/
+*.egg-info/
+
+# Local inference, training, and experiment output
+checkpoints/
+outputs/
+runs/
+artifacts/
+wandb/
+
+# Private or raw research material
+private_data/
+raw_data/
+videos_with_gps/
+videos_without_gps/
+*.MOV
+*.mov
+
+# Model and dataset tensors are release assets, not Git objects
+*.ckpt
+*.pth
+*.pt
+
+# Local logs and temporary files
+*.log
+*.tmp
+*.temp

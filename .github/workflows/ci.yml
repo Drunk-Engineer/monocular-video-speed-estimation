@@ -1,0 +1,334 @@
+name: CI
+
+"on":
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  linux-tests:
+    name: Linux / Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.13"]
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install package and test tools
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+
+      - name: Static checks
+        run: python -m ruff check src tests
+
+      - name: Tests
+        run: python -m pytest -q
+
+      - name: Validate citation metadata
+        if: matrix.python-version == '3.11'
+        run: |
+          python -m pip install "cffconvert==2.0.0"
+          cffconvert --validate
+
+  windows-smoke:
+    name: Windows smoke / Python 3.11
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install package
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+
+      - name: Import and CLI smoke tests
+        run: |
+          python -c "import monocular_speed"
+          monocular-speed --help
+
+  public-release-guard:
+    name: Public release guard
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+
+      - name: Reject private paths, secrets, large files, and forbidden media
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import subprocess
+
+          root = Path(".")
+          tracked = [
+              Path(item)
+              for item in subprocess.check_output(
+                  ["git", "ls-files", "-z"]
+              ).decode().split("\0")
+              if item
+          ]
+          allowed_tracked = {
+              Path(".gitattributes"),
+              Path(".github/workflows/ci.yml"),
+              Path(".github/workflows/release-validation.yml"),
+              Path(".gitignore"),
+              Path("CHANGELOG.md"),
+              Path("CITATION.cff"),
+              Path("DATA_CARD.md"),
+              Path("DATA_LICENSE.md"),
+              Path("LICENSE"),
+              Path("MODEL_CARD.md"),
+              Path("MODEL_LICENSE.md"),
+              Path("README.md"),
+              Path("README_zh-TW.md"),
+              Path("SECURITY.md"),
+              Path("THIRD_PARTY_NOTICES.md"),
+              Path("assets/demo.gif"),
+              Path("configs/thesis_r3d18_tcn.yaml"),
+              Path("docs/release-checklist.md"),
+              Path("docs/release-notes-v1.0.0.md"),
+              Path("docs/reproducibility.md"),
+              Path("pyproject.toml"),
+              Path("sample_data/anonymized_demo.mp4"),
+              Path("sample_data/demo_results.csv"),
+              Path("src/monocular_speed/__init__.py"),
+              Path("src/monocular_speed/__main__.py"),
+              Path("src/monocular_speed/cli.py"),
+              Path("src/monocular_speed/config.py"),
+              Path("src/monocular_speed/dataset.py"),
+              Path("src/monocular_speed/download.py"),
+              Path("src/monocular_speed/evaluation.py"),
+              Path("src/monocular_speed/inference.py"),
+              Path("src/monocular_speed/labels.py"),
+              Path("src/monocular_speed/metrics.py"),
+              Path("src/monocular_speed/model.py"),
+              Path("src/monocular_speed/training.py"),
+              Path("src/monocular_speed/video.py"),
+              Path("tests/test_cli.py"),
+              Path("tests/test_demo_data.py"),
+              Path("tests/test_evaluation.py"),
+              Path("tests/test_inference_utils.py"),
+              Path("tests/test_labels.py"),
+              Path("tests/test_metrics.py"),
+              Path("tests/test_model.py"),
+              Path("tests/test_training_utils.py"),
+          }
+
+          allowed_binary = {
+              Path("sample_data/anonymized_demo.mp4"),
+              Path("assets/demo.gif"),
+          }
+          forbidden_suffixes = {".mov", ".pt", ".pth", ".ckpt"}
+          text_suffixes = {
+              ".cff", ".cfg", ".csv", ".html", ".ini", ".json", ".md",
+              ".py", ".rst", ".sh", ".toml", ".txt", ".xml", ".yaml",
+              ".yml",
+          }
+          text_names = {".gitattributes", ".gitignore"}
+          byte_patterns = {
+              b"C:" + b"\\": "absolute Windows path",
+              b"/Users" + b"/": "absolute macOS path",
+              b"/home" + b"/": "absolute Linux home path",
+              b"gh" + b"p_": "GitHub personal token",
+              b"github_" + b"pat_": "GitHub fine-grained token",
+              b"AK" + b"IA": "AWS access-key prefix",
+          }
+
+          problems = []
+          tracked_set = set(tracked)
+          for relative in sorted(tracked_set - allowed_tracked):
+              problems.append(f"{relative}: file is not on the public allowlist")
+          for relative in sorted(allowed_tracked - tracked_set):
+              problems.append(f"{relative}: required allowlisted file is missing")
+          for relative in tracked:
+              path = root / relative
+              if not path.is_file():
+                  continue
+              size = path.stat().st_size
+              if size >= 100 * 1024 * 1024:
+                  problems.append(f"{relative}: tracked file is at least 100 MiB")
+              if (
+                  relative.suffix.lower() in forbidden_suffixes
+                  or relative.suffix.lower() == ".mp4"
+              ) and relative not in allowed_binary:
+                  problems.append(f"{relative}: forbidden tracked research/model file")
+              if (
+                  relative.suffix.lower() in text_suffixes
+                  or relative.name in text_names
+              ):
+                  data = path.read_bytes()
+                  for pattern, label in byte_patterns.items():
+                      if pattern in data:
+                          problems.append(f"{relative}: contains {label}")
+
+          history_lines = subprocess.check_output(
+              ["git", "rev-list", "--objects", "--all"]
+          ).decode(errors="replace").splitlines()
+          seen_blobs = set()
+          for line in history_lines:
+              if " " not in line:
+                  continue
+              object_id, name = line.split(" ", 1)
+              if object_id in seen_blobs:
+                  continue
+              seen_blobs.add(object_id)
+              kind = subprocess.check_output(
+                  ["git", "cat-file", "-t", object_id], text=True
+              ).strip()
+              if kind != "blob":
+                  continue
+              size = int(subprocess.check_output(
+                  ["git", "cat-file", "-s", object_id], text=True
+              ))
+              historical_path = Path(name)
+              suffix = historical_path.suffix.lower()
+              if size >= 100 * 1024 * 1024:
+                  problems.append(
+                      f"history {name}: blob is at least 100 MiB"
+                  )
+              if (
+                  suffix in forbidden_suffixes or suffix == ".mp4"
+              ) and historical_path not in allowed_binary:
+                  problems.append(
+                      f"history {name}: forbidden research/model blob"
+                  )
+              if (
+                  suffix in text_suffixes or historical_path.name in text_names
+              ) and size <= 5 * 1024 * 1024:
+                  data = subprocess.check_output(
+                      ["git", "cat-file", "-p", object_id]
+                  )
+                  for pattern, label in byte_patterns.items():
+                      if pattern in data:
+                          problems.append(
+                              f"history {name}: contains {label}"
+                          )
+
+          if not Path("sample_data/anonymized_demo.mp4").is_file():
+              problems.append("missing sample_data/anonymized_demo.mp4")
+          if not Path("sample_data/demo_results.csv").is_file():
+              problems.append("missing sample_data/demo_results.csv")
+          if not Path("assets/demo.gif").is_file():
+              problems.append("missing assets/demo.gif")
+
+          if problems:
+              raise SystemExit("\n".join(problems))
+          PY
+
+      - name: Validate public CSV
+        run: |
+          python - <<'PY'
+          import csv
+          import math
+          from pathlib import Path
+
+          path = Path("sample_data/demo_results.csv")
+          expected = [
+              "frame_index",
+              "timestamp_s",
+              "reference_speed_kmh",
+              "predicted_speed_kmh",
+          ]
+          with path.open(newline="", encoding="utf-8") as handle:
+              reader = csv.DictReader(handle)
+              if reader.fieldnames != expected:
+                  raise SystemExit(f"unexpected CSV columns: {reader.fieldnames}")
+              rows = list(reader)
+
+          if len(rows) != 300:
+              raise SystemExit(f"expected 300 rows, found {len(rows)}")
+
+          frames = [int(row["frame_index"]) for row in rows]
+          times = [float(row["timestamp_s"]) for row in rows]
+          reference = [float(row["reference_speed_kmh"]) for row in rows]
+          predictions = [float(row["predicted_speed_kmh"]) for row in rows]
+
+          if frames != list(range(300)):
+              raise SystemExit("frame_index must be unique and contiguous from 0")
+          if any(b <= a for a, b in zip(times, times[1:])):
+              raise SystemExit("timestamp_s must be strictly increasing")
+          if not all(math.isfinite(value) for value in times + reference + predictions):
+              raise SystemExit("CSV contains a non-finite value")
+          if not all(0 <= value <= 120 for value in reference + predictions):
+              raise SystemExit("speed outside the declared 0-120 km/h range")
+          PY
+
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes ffmpeg
+
+      - name: Inspect demo streams and metadata
+        shell: bash
+        run: |
+          ffprobe -v error \
+            -show_streams \
+            -show_format \
+            -of json \
+            sample_data/anonymized_demo.mp4 > "${RUNNER_TEMP}/demo_ffprobe.json"
+          python - "${RUNNER_TEMP}/demo_ffprobe.json" <<'PY'
+          import json
+          import math
+          import sys
+          from fractions import Fraction
+          from pathlib import Path
+
+          info = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+          streams = info.get("streams", [])
+          video = [stream for stream in streams if stream.get("codec_type") == "video"]
+          audio = [stream for stream in streams if stream.get("codec_type") == "audio"]
+
+          if len(video) != 1 or audio:
+              raise SystemExit("demo must contain exactly one video stream and no audio")
+
+          stream = video[0]
+          if stream.get("codec_name") != "h264":
+              raise SystemExit("demo video codec must be H.264")
+          if (stream.get("width"), stream.get("height")) != (960, 540):
+              raise SystemExit("demo resolution must be 960x540")
+          if int(stream.get("nb_frames", 0)) != 300:
+              raise SystemExit("demo must contain exactly 300 frames")
+          fps = float(Fraction(stream["avg_frame_rate"]))
+          if not math.isclose(fps, 30.0, rel_tol=0, abs_tol=0.01):
+              raise SystemExit(f"demo frame rate must be 30 fps, found {fps}")
+
+          all_tags = {}
+          all_tags.update(info.get("format", {}).get("tags", {}))
+          for item in streams:
+              all_tags.update(item.get("tags", {}))
+          forbidden = ("creation_time", "location", "make", "model", "device")
+          keys = {str(key).lower() for key in all_tags}
+          present = sorted(key for key in keys if any(word in key for word in forbidden))
+          if present:
+              raise SystemExit(f"sensitive metadata tags found: {present}")
+          PY

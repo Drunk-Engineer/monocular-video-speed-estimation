@@ -1,0 +1,65 @@
+model:
+  architecture: r3d18_tcn_motion
+  frames: 30
+  image_size: 224
+  output_frames: 30
+  dropout: 0.1
+  head_activation: sigmoid
+  target_mode: perframe
+  temporal_match: upsample_pred
+  label_normalization: minmax
+  speed_min_kmh: 0.0
+  speed_max_kmh: 120.0
+  pretrained_backbone: false
+
+inference:
+  fps: 30
+  stride: 15
+  weighting: triangular
+  calibration: false
+
+training:
+  batch_size: 6
+  epochs: 120
+  workers: 3
+  prefetch: 2
+  learning_rate: 0.0006
+  scheduler: cosine
+  warmup_epochs: 5
+  weight_decay: 0.0001
+  gradient_clip: 0.1
+  label_shift: 0
+  smooth_window: 5
+  smooth_lambda: 0.0
+  smooth_beta: 0.02
+  slope_lambda: 0.0
+  acceleration_lambda: 0.0
+  correlation_lambda: 0.0
+  std_floor_lambda: 0.003
+  std_floor: 0.04
+  speed_weight_kmh_threshold: 45.0
+  speed_weight_factor: 1.8
+  speed_weight_tau_kmh: 5.0
+  low_speed_weight_center_kmh: 5.0
+  low_speed_weight_factor: 2.5
+  low_speed_weight_tau_kmh: 5.0
+  speed_weight_warmup_epochs: 15
+  temporal_crop: true
+  temporal_crop_min_ratio: 0.8
+  time_mask_probability: 0.15
+  time_mask_length: 3
+  sampler: balanced_bins
+  amp: true
+  amp_dtype: bf16
+  channels_last_3d: true
+  compile: false
+  seed: 42
+  minimum_epochs: 5
+  patience: 10
+  early_stopping_delta: 0.0001
+  post_calibrate: true
+  calibration_fit_split: validation
+
+data:
+  train_index: data/train_index.csv
+  validation_index: data/validation_index.csv

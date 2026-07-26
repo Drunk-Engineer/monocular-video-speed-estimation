@@ -1,0 +1,69 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "monocular-video-speed-estimation"
+version = "1.0.0"
+description = "Validation-only per-frame speed estimation from full-view monocular riding video."
+readme = "README.md"
+requires-python = ">=3.11,<3.14"
+license = { file = "LICENSE" }
+authors = [
+  { name = "Ke-Jie Chen", email = "odinswim1990@icloud.com" },
+]
+keywords = [
+  "computer-vision",
+  "monocular-video",
+  "pytorch",
+  "speed-estimation",
+  "video-regression",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+  "numpy==2.2.6",
+  "opencv-python-headless==4.12.0.88",
+  "pandas==2.3.3",
+  "PyYAML==6.0.3",
+  "torch==2.6.0",
+  "torchvision==0.21.0",
+  "tqdm>=4.67,<5",
+]
+
+[project.optional-dependencies]
+ocr = ["pytesseract==0.3.13"]
+dev = [
+  "cffconvert>=2.0,<3",
+  "pytest>=8,<9",
+  "ruff>=0.12,<0.13",
+]
+
+[project.scripts]
+monocular-speed = "monocular_speed.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/Drunk-Engineer/monocular-video-speed-estimation"
+Repository = "https://github.com/Drunk-Engineer/monocular-video-speed-estimation"
+Issues = "https://github.com/Drunk-Engineer/monocular-video-speed-estimation/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

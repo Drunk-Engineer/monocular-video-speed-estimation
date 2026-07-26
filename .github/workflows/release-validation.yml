@@ -1,0 +1,83 @@
+name: Release asset validation
+
+"on":
+  workflow_dispatch:
+    inputs:
+      version:
+        description: GitHub Release tag to validate
+        required: true
+        default: v1.0.0
+      model_asset:
+        description: Model asset filename
+        required: true
+        default: r3d18_tcn_thesis_v1.0.0.pt
+
+permissions:
+  contents: read
+
+jobs:
+  validate-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install package
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+
+      - name: Download release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.version }}
+          MODEL_ASSET: ${{ inputs.model_asset }}
+        run: |
+          mkdir -p checkpoints
+          gh release download "${RELEASE_TAG}" \
+            --repo "${GITHUB_REPOSITORY}" \
+            --pattern "${MODEL_ASSET}" \
+            --pattern "SHA256SUMS.txt" \
+            --dir checkpoints
+
+      - name: Verify checksum
+        working-directory: checkpoints
+        run: sha256sum --check SHA256SUMS.txt --ignore-missing
+
+      - name: Run public demo with the release model
+        env:
+          MODEL_ASSET: ${{ inputs.model_asset }}
+        run: |
+          monocular-speed infer \
+            --input sample_data/anonymized_demo.mp4 \
+            --checkpoint "checkpoints/${MODEL_ASSET}" \
+            --output outputs/release
+
+      - name: Validate release output exists
+        run: test -s outputs/release/predictions.csv
+
+      - name: Compare against the published demo regression
+        run: |
+          python - <<'PY'
+          import numpy as np
+          import pandas as pd
+
+          expected = pd.read_csv("sample_data/demo_results.csv")[
+              "predicted_speed_kmh"
+          ].to_numpy()
+          actual = pd.read_csv("outputs/release/predictions.csv")[
+              "predicted_speed_kmh"
+          ].to_numpy()
+
+          if len(actual) != 300 or not np.isfinite(actual).all():
+              raise SystemExit("release inference output is incomplete or non-finite")
+          difference = np.max(np.abs(expected - actual))
+          if difference > 1e-4:
+              raise SystemExit(f"demo regression mismatch: max_abs={difference}")
+          print(f"demo regression max_abs={difference}")
+          PY
