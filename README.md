@@ -69,9 +69,10 @@ monocular-speed download-weights \
   --output checkpoints
 ```
 
-The checkpoint is intentionally excluded from Git history because it is larger
-than GitHub's normal per-file limit. Verify it against the accompanying
-`SHA256SUMS.txt` release asset before use.
+The command downloads the checkpoint, its model metadata, and
+`SHA256SUMS.txt`, then verifies both listed files. The checkpoint is
+intentionally excluded from Git history because it is larger than GitHub's
+normal per-file limit.
 
 ## Run the public demo
 

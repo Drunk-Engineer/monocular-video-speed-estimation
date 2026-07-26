@@ -58,7 +58,8 @@ monocular-speed download-weights \
   --output checkpoints
 ```
 
-checkpoint 超過 GitHub 一般 Git 單檔限制，因此只放在 Release，不寫入 Git 歷史。使用前請依同一 Release 的 `SHA256SUMS.txt` 驗證檔案。
+此指令會下載 checkpoint、模型 metadata 與 `SHA256SUMS.txt`，並驗證兩個列出的檔案。
+checkpoint 超過 GitHub 一般 Git 單檔限制，因此只放在 Release，不寫入 Git 歷史。
 
 ## 執行公開示範
 

@@ -45,7 +45,10 @@ def _parser() -> argparse.ArgumentParser:
     train.add_argument("--output", default=Path("outputs/training"), type=Path)
     train.add_argument("--device", default="auto", choices=["auto", "cpu", "cuda", "mps"])
 
-    download = commands.add_parser("download-weights", help="Download and verify a release model.")
+    download = commands.add_parser(
+        "download-weights",
+        help="Download and verify a release model bundle.",
+    )
     download.add_argument("--version", default="v1.0.0")
     download.add_argument("--output", required=True, type=Path)
     return parser
