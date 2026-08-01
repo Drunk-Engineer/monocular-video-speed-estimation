@@ -1,5 +1,9 @@
 # v1.0.0 — Validation-Only Research Release
 
+> **Metadata correction (2026-08-01):** The author name and thesis month below
+> were corrected to match the final thesis cover. The software, model weights,
+> validation results, release date, and DOI are unchanged.
+
 This is the first public release of the code and trained model associated with:
 
 > Jie-Chen Ke, *Per-Frame Vehicle Speed Estimation from Monocular Dashcam
