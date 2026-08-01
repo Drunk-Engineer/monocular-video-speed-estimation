@@ -101,9 +101,9 @@ OCR 標籤仍須人工核對；公開指令會使用多種 Tesseract 影像變�
 
 機器可讀的引用資料位於 [CITATION.cff](CITATION.cff)。建議學術引用：
 
-> Chen, Ke-Jie. *Per-Frame Vehicle Speed Estimation from Monocular Dashcam
+> Ke, Jie-Chen. *Per-Frame Vehicle Speed Estimation from Monocular Dashcam
 > Videos Using 3D Convolutional Neural Networks*. Master's thesis, Department
-> of Computer Science, National Taipei University of Education, July 2026.
+> of Computer Science, National Taipei University of Education, August 2026.
 
 v1.0.0 軟體封存版本：[https://doi.org/10.5281/zenodo.21604583](https://doi.org/10.5281/zenodo.21604583)。
 
@@ -114,4 +114,4 @@ v1.0.0 軟體封存版本：[https://doi.org/10.5281/zenodo.21604583](https://do
 - 公開示範 MP4、CSV 與 GIF：[CC BY 4.0](DATA_LICENSE.md)
 - 相依套件：[第三方聲明](THIRD_PARTY_NOTICES.md)
 
-聯絡人：[Ke-Jie Chen](mailto:odinswim1990@icloud.com)
+聯絡人：[Jie-Chen Ke](mailto:odinswim1990@icloud.com)

@@ -4,13 +4,13 @@ title: "Monocular Video Speed Estimation"
 type: software
 version: "1.0.0"
 authors:
-  - family-names: "Chen"
-    given-names: "Ke-Jie"
+  - family-names: "Ke"
+    given-names: "Jie-Chen"
     email: "odinswim1990@icloud.com"
     affiliation: "Department of Computer Science, National Taipei University of Education"
 contact:
-  - family-names: "Chen"
-    given-names: "Ke-Jie"
+  - family-names: "Ke"
+    given-names: "Jie-Chen"
     email: "odinswim1990@icloud.com"
     affiliation: "Department of Computer Science, National Taipei University of Education"
 abstract: "Research software for validation-only per-frame vehicle speed estimation from full-view monocular riding video using an R3D-18 and temporal convolutional network."
@@ -26,12 +26,12 @@ repository-code: "https://github.com/Drunk-Engineer/monocular-video-speed-estima
 preferred-citation:
   type: thesis
   authors:
-    - family-names: "Chen"
-      given-names: "Ke-Jie"
+    - family-names: "Ke"
+      given-names: "Jie-Chen"
   title: "Per-Frame Vehicle Speed Estimation from Monocular Dashcam Videos Using 3D Convolutional Neural Networks"
   thesis-type: "Master's thesis"
   institution:
     name: "National Taipei University of Education"
   department: "Department of Computer Science"
-  month: 7
+  month: 8
   year: 2026

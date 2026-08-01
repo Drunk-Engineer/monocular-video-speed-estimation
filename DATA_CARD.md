@@ -104,4 +104,4 @@ inference, identifying people or vehicles, or reconstructing a route.
 
 ## Contact
 
-Ke-Jie Chen — [odinswim1990@icloud.com](mailto:odinswim1990@icloud.com)
+Jie-Chen Ke — [odinswim1990@icloud.com](mailto:odinswim1990@icloud.com)

@@ -6,7 +6,14 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
-- Reserved for changes after the initial public research release.
+### Changed
+
+- Corrected the author's English name to `Jie-Chen Ke` (`Ke, Jie-Chen` in
+  bibliographic order) across citation, package, license, model, data, and
+  contact metadata.
+- Corrected the associated master's thesis month to August 2026.
+- Added a mailmap entry so Git tools attribute earlier commits made under the
+  transposed English name to the same author.
 
 ## [1.0.0] - 2026-07-26
 

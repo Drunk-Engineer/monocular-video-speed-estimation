@@ -1,10 +1,14 @@
 # v1.0.0 — Validation-Only Research Release
 
+> **Metadata correction (2026-08-01):** The author name and thesis month below
+> were corrected to match the final thesis cover. The software, model weights,
+> validation results, release date, and DOI are unchanged.
+
 This is the first public release of the code and trained model associated with:
 
-> Ke-Jie Chen, *Per-Frame Vehicle Speed Estimation from Monocular Dashcam
+> Jie-Chen Ke, *Per-Frame Vehicle Speed Estimation from Monocular Dashcam
 > Videos Using 3D Convolutional Neural Networks*, master's thesis, National
-> Taipei University of Education, July 2026.
+> Taipei University of Education, August 2026.
 
 The archival record for this version is
 [https://doi.org/10.5281/zenodo.21604583](https://doi.org/10.5281/zenodo.21604583).
