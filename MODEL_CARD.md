@@ -15,7 +15,7 @@ production speedometer.
 
 | Field | Value |
 | --- | --- |
-| Author | Ke-Jie Chen |
+| Author | Jie-Chen Ke |
 | Version | 1.0.0 |
 | Architecture | Randomly initialized R3D-18 + dilated TCN |
 | Input | RGB tensor `[B, 3, 30, 224, 224]`, values in `[0, 1]` |
@@ -115,4 +115,4 @@ architecture with strict key checking and verify the checksum first.
 
 ## Contact
 
-Ke-Jie Chen — [odinswim1990@icloud.com](mailto:odinswim1990@icloud.com)
+Jie-Chen Ke — [odinswim1990@icloud.com](mailto:odinswim1990@icloud.com)

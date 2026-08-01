@@ -1,6 +1,6 @@
 # Model License
 
-Copyright © 2026 Ke-Jie Chen.
+Copyright © 2026 Jie-Chen Ke.
 
 Unless a release explicitly states otherwise, the trained weight files
 published with this repository's GitHub Releases are licensed under the
@@ -12,7 +12,7 @@ No additional restrictions may be applied.
 
 Suggested attribution:
 
-> Ke-Jie Chen (2026), *Monocular Video Speed Estimation*, version 1.0.0.
+> Jie-Chen Ke (2026), *Monocular Video Speed Estimation*, version 1.0.0.
 
 The weights are provided without warranties. They are a validation-only
 research artifact and are not suitable for law enforcement, certified speed

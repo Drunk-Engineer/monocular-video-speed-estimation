@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.11,<3.14"
 license = { file = "LICENSE" }
 authors = [
-  { name = "Ke-Jie Chen", email = "odinswim1990@icloud.com" },
+  { name = "Jie-Chen Ke", email = "odinswim1990@icloud.com" },
 ]
 keywords = [
   "computer-vision",

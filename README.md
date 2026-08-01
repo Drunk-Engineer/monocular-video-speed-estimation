@@ -130,9 +130,9 @@ lag of approximately eight frames. See [DATA_CARD.md](DATA_CARD.md).
 Citation metadata is provided in [CITATION.cff](CITATION.cff). The preferred
 academic reference is:
 
-> Chen, Ke-Jie. *Per-Frame Vehicle Speed Estimation from Monocular Dashcam
+> Ke, Jie-Chen. *Per-Frame Vehicle Speed Estimation from Monocular Dashcam
 > Videos Using 3D Convolutional Neural Networks*. Master's thesis, Department
-> of Computer Science, National Taipei University of Education, July 2026.
+> of Computer Science, National Taipei University of Education, August 2026.
 
 The archived v1.0.0 software release is available at
 [https://doi.org/10.5281/zenodo.21604583](https://doi.org/10.5281/zenodo.21604583).
@@ -144,4 +144,4 @@ The archived v1.0.0 software release is available at
 - Public demo MP4, CSV, and GIF: [CC BY 4.0](DATA_LICENSE.md)
 - Dependencies: [third-party notices](THIRD_PARTY_NOTICES.md)
 
-Contact: [Ke-Jie Chen](mailto:odinswim1990@icloud.com)
+Contact: [Jie-Chen Ke](mailto:odinswim1990@icloud.com)

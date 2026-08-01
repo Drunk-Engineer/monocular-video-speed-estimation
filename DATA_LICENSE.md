@@ -1,6 +1,6 @@
 # Demo Data License
 
-Copyright © 2026 Ke-Jie Chen.
+Copyright © 2026 Jie-Chen Ke.
 
 The following author-produced, anonymized demo assets are licensed under the
 [Creative Commons Attribution 4.0 International License (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/legalcode):
@@ -14,7 +14,7 @@ credit is given, a link to the license is supplied, and changes are indicated.
 
 Suggested attribution:
 
-> Ke-Jie Chen (2026), anonymized demonstration assets from *Monocular Video
+> Jie-Chen Ke (2026), anonymized demonstration assets from *Monocular Video
 > Speed Estimation*, version 1.0.0.
 
 The license does not apply to the private source recordings, the complete
